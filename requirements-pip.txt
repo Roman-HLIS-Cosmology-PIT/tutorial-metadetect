@@ -1,0 +1,13 @@
+scipy
+numba
+pyyaml
+sep
+git+https://github.com/esheldon/meds.git
+git+https://github.com/esheldon/ngmix.git
+git+https://github.com/esheldon/sxdes.git
+git+https://github.com/esheldon/metadetect.git
+astropy
+galsim
+jupyter
+jupyterlab
+matplotlib
