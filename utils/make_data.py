@@ -10,6 +10,7 @@ def make_data_metacal_simple(
     g2=0.0,
     psf_model="moffat",
     psf_fwhm=0.6,
+    do_shift=True,
     image_size=51,
     pixel_scale=0.2,
     noise_sigma=1e-5,
@@ -22,11 +23,21 @@ def make_data_metacal_simple(
     elif model == "exp":
         gal = galsim.Exponential(half_light_radius=hlr)
     gal = gal.shear(g1=g1, g2=g2)
+    if do_shift:
+        dy, dx = rng.uniform(
+            low=-pixel_scale / 2, high=pixel_scale / 2, size=2
+        )
+    else:
+        dx = 0
+        dy = 0
+    gal = gal.shift(dx=dx, dy=dy)
 
     if psf_model == "gauss":
         psf = galsim.Gaussian(fwhm=psf_fwhm)
     elif psf_model == "moffat":
-        psf = galsim.Moffat(fwhm=0.6, beta=3.5)
+        psf = galsim.Moffat(fwhm=0.6, beta=2.5)
+    elif psf_model is None:
+        psf = galsim.DeltaFunction()
 
     obj = galsim.Convolve([gal, psf])
 
@@ -39,10 +50,13 @@ def make_data_metacal_simple(
     noise = rng.normal(size=(image_size, image_size)) * noise_sigma
     img += noise
 
-    psf_img = psf.drawImage(
-        nx=image_size,
-        ny=image_size,
-        scale=pixel_scale,
-    ).array
+    if psf_model is None:
+        psf_img = None
+    else:
+        psf_img = psf.drawImage(
+            nx=image_size,
+            ny=image_size,
+            scale=pixel_scale,
+        ).array
 
-    return img, psf_img
+    return img, psf_img, (dx, dy)

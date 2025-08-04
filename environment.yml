@@ -16,4 +16,6 @@ dependencies:
   - galsim
   - jupyter
   - jupyterlab
+  - tqdm
+  - joblib
   - matplotlib
