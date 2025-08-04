@@ -1,4 +1,7 @@
 scipy
+numpy  # meds needs this, but doesn't declare it.
+esutil
+fitsio
 numba
 pyyaml
 sep
@@ -16,3 +19,5 @@ tqdm
 joblib
 s3fs
 matplotlib
+setuptools
+wheels
