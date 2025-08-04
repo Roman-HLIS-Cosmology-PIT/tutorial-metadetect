@@ -19,4 +19,5 @@ pip install --upgrade pipenv
 python -m pipenv install
 python -m pipenv shell
 ```
-- Step 2: we can now install the rest of the libraries: `pip install -r requirements-pip.txt`
+- Step 2: Install some core dependencies separately with `pip install setuptools wheels numpy`
+- Step 3: we can now install the rest of the libraries: `pip install -r requirements-pip.txt`
