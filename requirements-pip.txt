@@ -2,6 +2,7 @@ scipy
 numba
 pyyaml
 sep
+fitsio
 esutil
 git+https://github.com/esheldon/meds.git
 git+https://github.com/esheldon/ngmix.git
