@@ -19,5 +19,3 @@ tqdm
 joblib
 s3fs
 matplotlib
-setuptools
-wheels
