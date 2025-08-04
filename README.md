@@ -8,7 +8,7 @@ Tutorial on metacalibration and metadetection.
 ## Conda
 Make conda environment from the `environment.yml` file:
 ```bash
-conda create -f environment.yml
+conda env create -f environment.yml
 ```
 
 ## Pip
