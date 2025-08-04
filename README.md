@@ -13,7 +13,7 @@ conda env create -f environment.yml
 
 ## Pip
 To install the requirements using pip:
-- Step 1: create your python environment with python and pip (tested with python>=3.12)
+- Step 1: create your python environment with python and pip (tested with python=3.13.5, should work with "older" version)
 - Step 2: we nned to install some packages manually first:
 ```bash
 pip install --upgrade setuptools wheel numpy
