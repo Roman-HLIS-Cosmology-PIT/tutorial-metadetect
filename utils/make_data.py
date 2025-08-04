@@ -60,3 +60,73 @@ def make_data_metacal_simple(
         ).array
 
     return img, psf_img, (dx, dy)
+
+
+def make_data_metadetect_simple(
+    separation=10.0,
+    model="gauss",
+    hlr=0.5,
+    g1=0.0,
+    g2=0.0,
+    psf_model="moffat",
+    psf_fwhm=0.6,
+    do_shift=True,
+    image_size=51,
+    pixel_scale=0.2,
+    noise_sigma=1e-5,
+    seed=42,
+):
+    rng = np.random.RandomState(seed)
+
+    if model == "gauss":
+        gal = galsim.Gaussian(half_light_radius=hlr)
+    elif model == "exp":
+        gal = galsim.Exponential(half_light_radius=hlr)
+    gal = gal.shear(g1=g1, g2=g2)
+    if do_shift:
+        dy, dx = rng.uniform(
+            low=-pixel_scale / 2, high=pixel_scale / 2, size=2
+        )
+    else:
+        dx = 0
+        dy = 0
+    gal = gal.shift(dx=dx, dy=dy)
+
+    if psf_model == "gauss":
+        psf = galsim.Gaussian(fwhm=psf_fwhm)
+    elif psf_model == "moffat":
+        psf = galsim.Moffat(fwhm=0.6, beta=2.5)
+    elif psf_model is None:
+        psf = galsim.DeltaFunction()
+
+    obj = galsim.Convolve([gal, psf])
+
+    img = galsim.Image(
+        image_size,
+        image_size,
+        scale=pixel_scale,
+    )
+    for i in range(2):
+        obj.drawImage(
+            image=img,
+            offset=galsim.PositionD(
+                x=(-1) ** i * separation / 2, y=0
+            ),  # Alternate left/right
+            add_to_image=True,
+        )
+
+    img = img.array
+
+    noise = rng.normal(size=(image_size, image_size)) * noise_sigma
+    img += noise
+
+    if psf_model is None:
+        psf_img = None
+    else:
+        psf_img = psf.drawImage(
+            nx=image_size,
+            ny=image_size,
+            scale=pixel_scale,
+        ).array
+
+    return img, psf_img, (dx, dy)

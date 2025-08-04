@@ -12,4 +12,5 @@ jupyter
 jupyterlab
 tqdm
 joblib
+s3fs
 matplotlib
