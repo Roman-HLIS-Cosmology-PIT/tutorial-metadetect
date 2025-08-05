@@ -21,7 +21,7 @@ python -m pipenv shell
 ```
 - Step 2: Install some core dependencies separately with
 ```bash
-pip install setuptools wheels numpy
+pip install setuptools wheel numpy
 ```
 - Step 3: we can now install the rest of the libraries:
 ```bash
