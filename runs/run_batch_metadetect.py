@@ -122,7 +122,7 @@ def _match_meta_fluxes_from_image(image_path, mdet_seed, model, band="H158", use
     cfg["model"] = model
 
     if keepcols is None:
-        keepcols = ['flags', 's2n', 'band_flux_flags']
+        keepcols = ['flags', 's2n', 'band_flux_flags', 'T', 'T_ratio']
     
     
     # Read images from preview folder
@@ -169,6 +169,8 @@ def _match_meta_fluxes_from_image(image_path, mdet_seed, model, band="H158", use
 
     buff_mask = (res["noshear"]["sx_col"] > BOUND_SIZE) & (res["noshear"]["sx_col"] < IMG_SIZE-BOUND_SIZE) & \
             (res["noshear"]["sx_row"] > BOUND_SIZE) & (res["noshear"]["sx_row"] < IMG_SIZE-BOUND_SIZE)
+    star_mask = (res["noshear"][model+'_'+'T'] < 0.01) #preliminary, needs testing
+    star_mask = (~star_mask).astype(int) #convert boolean to 0,1. 0 = galaxy, 1 = star. 
 
     buff_mask = (~buff_mask).astype(int) # convert boolean to 0,1. 0 = good, 1 = bad. ~buff_mask needed because conversion to bool
                                          # is True = 1 and False = 0 by default
@@ -177,7 +179,8 @@ def _match_meta_fluxes_from_image(image_path, mdet_seed, model, band="H158", use
         'dec_meta': dec_pos, 
         'flux_meta': flux_meas, 
         'mag_meta': mags_meas,
-        'edge_flag': buff_mask
+        'edge_flag': buff_mask,
+        'star_mask': star_mask
     }
     for col in keepcols:
         resultdic[col] = res['noshear'][model+ '_' + col]
